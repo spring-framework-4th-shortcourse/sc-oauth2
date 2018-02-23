@@ -1,9 +1,7 @@
 package org.sc.oauth2.resource.server;
 
-import java.util.Arrays;
-
-import org.sc.oauth2.resource.server.model.Article;
-import org.sc.oauth2.resource.server.repository.ArticleRepository;
+import org.sc.oauth2.resource.server.model.User;
+import org.sc.oauth2.resource.server.repository.UserRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,19 +14,16 @@ public class App implements ApplicationRunner {
 		SpringApplication.run(App.class, args);
 	}
 
-	private ArticleRepository articleRepo;
-
-	public App(ArticleRepository articleRepo) {
-		this.articleRepo = articleRepo;
+	private UserRepository userRepo;
+	
+	public App(UserRepository userRepo) {
+		this.userRepo = userRepo;
 	}
 
 	@Override
 	public void run(ApplicationArguments arg0) throws Exception {
-		Arrays.asList(
-				"Why Quitters Can Become Winners Too", 
-				"The Lost Art of Criticism",
-				"Is Planning a Kind of Guessing?").forEach(title -> {
-					articleRepo.save(new Article(title));
-				});
+		
+		User user = new User("admin", "admin@gmail.com", "21101994", "Kandal");
+		userRepo.save(user);
 	}
 }

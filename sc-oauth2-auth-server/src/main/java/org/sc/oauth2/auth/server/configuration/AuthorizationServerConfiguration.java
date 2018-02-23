@@ -37,22 +37,34 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients
 			.inMemory()
+				.withClient("check_token").secret("secret") //this client is used by resource server for check_token endpoint only
+		        .authorities("ROLE_CHECK_TOKEN")
+		        
+		   .and()
 		        .withClient("trusted").secret("secret")
 		        .authorities("ROLE_TRUSTED_CLIENT")
-		        .authorizedGrantTypes("password", "authorization_code", "implicit", "client_credentials", "refresh_token")
-		        .scopes("read", "write", "trust")
+		        .authorizedGrantTypes("password", "refresh_token")
+		        .scopes("trust")
 		        .redirectUris("http://localhost:8282/client/")
 		        .accessTokenValiditySeconds(60)
 		        .refreshTokenValiditySeconds(15*60)
 		        .autoApprove(false)
-	        .and()
-		        .withClient("client1").secret("secret")
-		        .authorities("ROLE_TRUSTED_CLIENT")
-		        .authorizedGrantTypes("authorization_code", "refresh_token")
-		        .scopes("read")
+		        
+		   .and()
+		        .withClient("client-a").secret("secret")
+		        .authorities("ROLE_CLIENT_A")
+		        .authorizedGrantTypes("password", "authorization_code", "implicit", "client_credentials", "refresh_token")
+		        .scopes("public_profile", "email", "date_of_birth", "place_of_birth")
 		        .redirectUris("http://localhost:8282/client/")
 		        .accessTokenValiditySeconds(60)
 		        .refreshTokenValiditySeconds(15*60)
+		        
+	        .and() 
+		        .withClient("client-b").secret("secret")
+		        .authorities("ROLE_CLIENT_B")
+		        .authorizedGrantTypes("authorization_code", "refresh_token")
+		        .scopes("public_profile")
+		        .redirectUris("http://localhost:8282/client/")
 		    ;		
 	}
 	

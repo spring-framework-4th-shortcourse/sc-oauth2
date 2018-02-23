@@ -23,21 +23,8 @@ public class OAuth2ClientConfiguration {
 
 	@Bean
 	public OAuth2RestTemplate oauthRestTemplate() {
-		OAuth2RestTemplate template = new OAuth2RestTemplate(authorizationCode(), oAuth2ClientContext);
+		OAuth2RestTemplate template = new OAuth2RestTemplate(resourceOWnerPasswordCredentials(), oAuth2ClientContext);
 		return template;
-	}
-
-	// Authorization Code Grant | Support refresh_token
-	@Bean
-	public OAuth2ProtectedResourceDetails authorizationCode() {
-		AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
-		details.setClientId("trusted");
-		details.setClientSecret("secret");
-		details.setAccessTokenUri("http://localhost:8080/oauth/token");
-		details.setUserAuthorizationUri("http://localhost:8080/oauth/authorize");
-		details.setPreEstablishedRedirectUri("http://localhost:8282/client/home");
-		details.setScope(Arrays.asList("read", "write", "trust"));
-		return details;
 	}
 
 	// Resource Owner Password Credentials Grant | Support refresh_token
@@ -49,7 +36,20 @@ public class OAuth2ClientConfiguration {
 		details.setUsername("admin");
 		details.setPassword("admin");
 		details.setAccessTokenUri("http://localhost:8080/oauth/token");
-		details.setScope(Arrays.asList("read", "write", "trust"));
+		details.setScope(Arrays.asList("trust"));
+		return details;
+	}
+	
+	// Authorization Code Grant | Support refresh_token
+	@Bean
+	public OAuth2ProtectedResourceDetails authorizationCode() {
+		AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
+		details.setClientId("client-a");
+		details.setClientSecret("secret");
+		details.setAccessTokenUri("http://localhost:8080/oauth/token");
+		details.setUserAuthorizationUri("http://localhost:8080/oauth/authorize");
+		details.setPreEstablishedRedirectUri("http://localhost:8282/client/home");
+		details.setScope(Arrays.asList("public_profile", "email", "date_of_birth", "place_of_birth"));
 		return details;
 	}
 
@@ -57,10 +57,10 @@ public class OAuth2ClientConfiguration {
 	@Bean
 	public OAuth2ProtectedResourceDetails clientCredentials() {
 		ClientCredentialsResourceDetails details = new ClientCredentialsResourceDetails();
-		details.setClientId("trusted");
+		details.setClientId("client-a");
 		details.setClientSecret("secret");
 		details.setAccessTokenUri("http://localhost:8080/oauth/token");
-		details.setScope(Arrays.asList("read", "write", "trust"));
+		details.setScope(Arrays.asList("public_profile", "email", "date_of_birth", "place_of_birth"));
 		return details;
 	}
 
@@ -68,9 +68,9 @@ public class OAuth2ClientConfiguration {
 	@Bean
 	public OAuth2ProtectedResourceDetails implicit() {
 		ImplicitResourceDetails details = new ImplicitResourceDetails();
-		details.setClientId("trusted");
+		details.setClientId("client-a");
 		details.setUserAuthorizationUri("http://localhost:8080/oauth/authorize");
-		details.setScope(Arrays.asList("read", "write", "trust"));
+		details.setScope(Arrays.asList("public_profile", "email", "date_of_birth", "place_of_birth"));
 		return details;
 	}
 

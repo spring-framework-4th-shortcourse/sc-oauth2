@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 @RestController
 @SpringBootApplication
 public class App {
@@ -19,7 +21,12 @@ public class App {
 	@Autowired
 	OAuth2RestTemplate restTemplate;
 
-	@RequestMapping
+	@RequestMapping("/")
+	public JsonNode userProfile(){
+		return restTemplate.getForObject("http://localhost:8181/api/me", JsonNode.class);
+	}
+	
+	@RequestMapping("/token")
 	public OAuth2AccessToken accessToken() {
 		return restTemplate.getAccessToken();
 	}
